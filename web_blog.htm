@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>The working blog</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="css/basic.css" type="text/css">
+	<script type="text/javascript" src="js/diff.js"></script>
+</head>
+<body>
+<template id="cambiamentiTempl">
+    <div class="well">
+        <input style="font-size: 28px;padding: 4px" placeholder="Insert a title">
+        <textarea style="width: 100%;padding: 8px" placeholder="Type some text"></textarea>
+        <button class="btn btn-success" onclick="saveNote(this.parentNode)">Save</button>
+    </div>
+</template>
+<h1 style="text-align:center">Write your blog</h1>
+<div style="padding: 8px 20px">
+	<div class="well" style="text-align: center">
+		<h2>Create new post</h2>
+		<p><a class="btn btn-primary btn-lg" href="#" role="button" onclick="">Create</a></p>
+	</div>
+	<div class="well"><input style="font-size: 28px;padding: 4px" placeholder="Insert a title"><textarea style="width: 100%;padding: 8px" placeholder="Type some text"></textarea></div>
+	<div class="well" id="test1">
+		<div style="float: right">
+			<div class="btn-group">
+				<button type="button" class="btn btn-default" onclick="attivaCambiamenti(this.parentNode.parentNode.parentNode)">Edit</button>
+				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<span class="caret"></span>
+					<span class="sr-only">Toggle Dropdown</span>
+				</button>
+				<ul class="dropdown-menu dropdown-menu-right">
+					<li><a onclick="attivaCambiamenti(this.parentNode.parentNode.parentNode.parentNode.parentNode)"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>Edit</a></li>
+					<li role="separator" class="divider"></li>
+					<li><a href="#"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>Delete</a></li>
+				</ul>
+			</div>
+		</div>
+		<h2>Post title</h2>
+		<p>This is a post someone has made</p>
+	</div>
+    <button onclick="attivaCambiamenti($('#test1')[0])">Click</button>
+</div>
+    
+<script type="text/javascript">
+    function attivaCambiamenti(wellElem){//Replaces elem with a similar layout with textboxes, returns HTML for insertion (as if you want to add a new note)
+        var templ = document.getElementById("cambiamentiTempl");
+        var titoloEl = templ.content.querySelector("input");
+        var textareaEl = templ.content.querySelector("textarea");
+        
+        var titolo = wellElem.querySelector("h2").innerHTML;
+        var content = wellElem.querySelector("p").innerHTML;
+        
+        var HTML = templ.innerHTML;
+        wellElem.innerHTML = templ.content.querySelector(".well").innerHTML;
+        setTimeout(function(){
+            wellElem.getElementsByTagName("input")[0].value = titolo;
+            wellElem.getElementsByTagName("textarea")[0].innerHTML = content;
+        },0);
+        
+        return templ.innerHTML;
+    }
+    
+    function saveNote(wellElem){
+	var titolo = wellElem.getElementsByTagName("input")[0].value;
+	var contenuto = wellElem.getElementsByTagName("textarea")[0].value;
+	alert("Titolo: "+titolo+"\n"+contenuto);
+    }
+</script>
+</body>
+</html>

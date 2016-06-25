@@ -1,0 +1,9 @@
+.well input, .well textarea {
+  width: 100%;
+  border: none;
+  background: transparent;
+}
+
+ul.dropdown-menu li .glyphicon{
+  padding-right: 8px;
+}

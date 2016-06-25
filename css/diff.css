@@ -1,0 +1,12 @@
+.diff{
+
+}
+
+.diff.agg{
+  color: green;
+}
+
+.diff.rim{
+  text-decoration: line-through;
+  color: red;
+}

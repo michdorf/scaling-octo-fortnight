@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Test af diff</title>
+	<link rel="stylesheet" href="../css/diff.css" type="text/css">
+</head>
+<body>
+ <div id="cont"></div>
+ <button onclick="go()">Klik her</button>
+ <script type="text/javascript" src="../js/diff.js"></script>
+ <script type="text/javascript">
+
+  var str1 = "Jeg er en sej person";
+  var str2 = "Jeg er bare awesome sej med banan og selleri";
+
+  function go(){document.getElementById("cont").innerHTML = "\""+str1.update(diff(str1,str2))+"\"";
+  }
+ </script>
+</body>
+</html>

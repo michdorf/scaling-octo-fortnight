@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="it">
+<head>
+ <meta charset="UTF-8">
+ <title>Prova di sincronizzazione</title>
+ <script type="text/javascript" src="/js/std.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+</head>
+<body>
+
+<h1>Todos:</h1>
+<ol>
+ <li>En funktion til at indlede/starte synkronisering</li>
+ <li>Et system til at styre tiden mellem hver synkronisering afhængig af om der er nye ting</li>
+ <li>Et system til at lytte til events - skal gerne integreres med addEventListener også</li>
+ <li>Et PHP system til at gemme og hente ændringer</li>
+ <li>Husk at have app-id (eller app+page-id)</li>
+</ol>
+
+<script type="text/javascript">
+
+ if (typeof m != "object"){
+  console.error("Devi includere std.js");
+ }
+
+ var sinc = {
+  appId: "test",
+  stdIntervallo: 1000,
+  ultSincId: [], //Id dal banca dati
+  curSincId: 0
+ };
+
+ //Non funziona in IE - https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events
+ sinc.eventHDL = new Event('sinc');
+ // Listen for the event.
+  /* document.addEventListener('sinc', function (e) { alert(e.detail) }, false); */
+
+ sinc.init = function (args) {
+  try{
+   if (typeof args == "undefined")
+    throw "args non c'è";
+   if (!args.url)
+    throw "url non c'è";
+  }catch (e){
+   m.error("Manca argumenti in sinc.init: "+ e.message);
+   return false
+  }
+
+  var sincId = args.sincId ? args.sincId : sinc.curSincId++; //Ritorna curSincId e incrementa dopo
+  if (args.appId){sinc.appId = args.appId}
+  var appId = sinc.appId;
+
+  //Ricievi ultimo sincId - quello del banca dati
+  if (sinc.ultSincId.length == 0){
+   try {
+    sinc.ultSincId = localStorage.ultSincId ? JSON.parse(localStorage.ultSincId) : [];
+   }catch (e){sinc.ultSincId=[]}
+  }else{sinc.ultSincId=[]}
+  var ultSincId = sinc.ultSincId[sincId] ? sinc.ultSincId[sincId] : 0;
+
+  args.url += (args.url.indexOf("?")==-1 ? "?" : "&")+"ultSincId="+ultSincId+"&appId="+appId;
+  $.ajax({
+   url:args.url,
+   complete: function (data){
+    m.info(data.responseText.substr(0,28));
+    novita = Math.random()<0.2;
+
+    // Dispatch the event.
+    sinc.eventHDL = new CustomEvent('sinc', { 'detail': "hej" });
+    document.dispatchEvent(sinc.eventHDL);
+
+    sinc.ultSincId[sincId] = ultSincId;
+    intervallo = args.intervallo?args.intervallo:sinc.stdIntervallo;
+
+    //Calcola intervallo a seconda della risposta dell'url
+    if (novita)
+     intervallo = sinc.stdIntervallo;
+    else
+     intervallo = Math.round(intervallo*1.46);
+
+    if (intervallo>20000){intervallo = 20000}
+
+    args.sincId = sincId; args.intervallo = intervallo;
+    m.info("Intervallo:"+intervallo+"ms");
+    setTimeout(function (){sinc.init(args)},intervallo);//Ripeti
+   }
+  });
+
+ };
+
+</script>
+</body>
+</html>

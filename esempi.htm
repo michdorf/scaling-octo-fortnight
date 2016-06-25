@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mostra di tutte le funzioni</title>
+    <script type="text/javascript" src="js/std.js"></script>
+    <script type="text/javascript" src="js/modello.js"></script>
+  </head>
+  <body>
+    <template id="templateElem">
+      <h1>Mit navn er =[name]</h1>
+      <h2>=[name] er mit navn</h2>
+    </template>
+    <div id="templateCont"></div>
+    
+    <script type="text/javascript">
+      modello.ins(elem("#templateElem"), elem("#templateCont"), {name:"Michele"});
+    </script>
+  </body>
+</html>
